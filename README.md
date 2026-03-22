@@ -10,8 +10,8 @@
 
 * Raspberry Pi 4
 * Microphone (ReSpeaker 2-Mic HAT)
-* Smart Bulb (Yeelight)
-* Smartphone
+* Smart Bulb (Yeelight W3 Multicolor)
+* Smartphone Notification (Line & Discord)
 
 ### Software
 
@@ -29,14 +29,14 @@ config/             # configuration ของระบบ
 homeassistant/      # automation สำหรับ Home Assistant
 models/             # AI model (yamnet.tflite)
 data/               # dataset และ evaluation data
-evaluation/         # ประเมินและผลลัพธ์ของระบบ (xlsx)
+evaluation/         # ประเมินและผลลัพธ์ของระบบ (test results)
 ```
 
 ---
 
 ## Dataset
 
-โครงงานนี้ใช้ชุดข้อมูล **UrbanSound8K**
+ใช้ชุดข้อมูล **UrbanSound8K**
 
 Download:
 https://urbansounddataset.weebly.com/urbansound8k.html
@@ -56,7 +56,7 @@ data/evaluationSound/
 
 ---
 
-## Installation
+## Installation & Build
 
 ### 1. Clone Repository
 
@@ -71,16 +71,32 @@ cd HearWithYourEyes
 pip install -r requirements.txt
 ```
 
-### 3. Prepare Dataset
+## 3. Setup Model
 
-* ดาวน์โหลด UrbanSound8K
-* แตกไฟล์ไว้ในโฟลเดอร์ `data/`
+ดาวน์โหลดไฟล์:
+
+* yamnet.tflite
+* yamnet_class_map.csv
+
+แล้ววางใน:
+
+```
+models/
+```
+
+## 4. Setup Dataset
+
+ดาวน์โหลด UrbanSound8K และวางไว้ใน:
+
+```
+data/urbansound8k/
+```
 
 ---
 
 ## Configuration
 
-### Microphone
+## 1. Microphone (Raspberry Pi)
 
 ตรวจสอบอุปกรณ์:
 
@@ -88,28 +104,48 @@ pip install -r requirements.txt
 arecord -l
 ```
 
----
-
-### Smart Light (Yeelight)
-
-* เปิด LAN Control ในแอป
-* ใส่ IP ในไฟล์ config
-
----
-
-### Home Assistant
-
-* ตั้งค่า Webhook / REST API
-* เพิ่ม Automation สำหรับแจ้งเตือน
-
----
-
-## ▶Usage
-
-รันระบบ:
+ทดสอบบันทึกเสียง:
 
 ```bash
-python main.py
+arecord -D plughw:1,0 test.wav
+```
+
+## 2. Smart Light (Yeelight W3 Multicolor)
+
+* เปิด **LAN Control** ในแอป Yeelight
+* หา IP ของหลอดไฟ
+
+แก้ไขไฟล์ config:
+
+```yaml
+light_ip: "192.168.x.x"
+```
+
+## 3. Home Assistant
+
+### วิธีเชื่อมต่อ:
+
+* ใช้ **REST API / Webhook**
+
+ตัวอย่าง config:
+
+```yaml
+webhook_url: "http://homeassistant.local:8123/api/webhook/sound_event"
+```
+
+### ตั้งค่า Automation:
+
+* รับ event จาก Raspberry Pi
+* สั่งเปิดไฟ / แจ้งเตือนมือถือ
+
+---
+
+## Usage
+
+รันระบบบน Raspberry Pi:
+
+```bash
+python src/raspberry_pi/raspberry_pi.py
 ```
 
 ---
@@ -124,4 +160,4 @@ python test/test_inference.py
 
 ## License
 
-This project is developed for educational purposes.
+This project is for educational purposes only.
