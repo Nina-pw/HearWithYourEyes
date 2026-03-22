@@ -1,0 +1,35 @@
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+rest_command:
+  line_notify:
+    url: https://api.line.me/v2/bot/message/push
+    method: POST
+    headers:
+      Authorization: "Bearer XOgMjb/QN8q0DIJM1AF1qYEOaIJveU4/janckEGRsRndDP3oO7ZXiLEJH6nJU4OvLF35WoebVHqfuefWarjhRHXc4e>
+      Content-Type: "application/json"
+    payload: >
+      {
+        "to": "U3d2139a5f9d1669ef63c34a8d845c708",
+        "messages": [
+          {
+            "type": "text",
+            "text": "{{ message }}"
+          }
+        ]
+      }
+  hwy_api_notify:
+    url: "http://127.0.0.1:8000/api/alert"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+    payload: >
+      {
+        "event": "{{ event }}",
+        "level": "{{ level }}",
+        "message": "{{ message }}",
+        "confidence": {{ confidence }}
+      }

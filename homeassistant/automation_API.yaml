@@ -1,0 +1,75 @@
+alias: HearWithYourEyes
+description: Sound event → Visual alert with Yeelight
+triggers:
+  - webhook_id: yamnet_event
+    allowed_methods:
+      - POST
+    local_only: true
+    trigger: webhook
+actions:
+  - variables:
+      color: "{{ trigger.json.color | default('') | lower }}"
+      event: "{{ trigger.json.event | default('unknown') | lower }}"
+      confidence: "{{ (trigger.json.confidence | default(0) * 100) | round(1) }}"
+  - variables:
+      event_text: >
+        {% if 'smoke alarm' in event %}ตรวจพบสัญญาณเตือนไฟไหม้ {% elif 'fire
+        alarm' in event %}ตรวจพบเหตุไฟไหม้ {% elif 'carbon monoxide' in event
+        %}ตรวจพบก๊าซพิษคาร์บอนมอนอกไซด์ {% elif 'gas' in event %}ตรวจพบแก๊สรั่ว
+        {% elif 'gunshot' in event %}ตรวจพบเสียงปืน {% elif 'explosion' in event
+        %}ตรวจพบเสียงระเบิด {% elif 'glass' in event %}ตรวจพบเสียงกระจกแตก {%
+        elif 'impact' in event %}ตรวจพบแรงกระแทกผิดปกติ {% elif 'scream' in
+        event %}ตรวจพบเสียงกรีดร้อง {% elif 'shout' in event %}ตรวจพบเสียงตะโกน
+        {% elif 'baby cry' in event %}ตรวจพบเสียงเด็กร้อง {% elif 'dog' in event
+        or 'bark' in event %}ตรวจพบเสียงสุนัขเห่า {% elif 'doorbell' in event
+        %}มีผู้กดกริ่งหน้าบ้าน {% elif 'telephone' in event %}มีสายโทรเข้า {%
+        else %}ตรวจพบเหตุการณ์ไม่ทราบประเภท {% endif %}
+  - variables:
+      level_title: >-
+        {% if color == 'red' %}Emergency {% elif color == 'orange' %}Warning {%
+        elif color == 'yellow' %}Caution {% elif color == 'green' %}General
+        Notification {% else %}Contextual Awareness{% endif %}
+  - data:
+      event: "{{ event }}"
+      level: "{{ level_title }}"
+      message: "{{ event_text }}"
+      confidence: "{{ confidence }}"
+    action: rest_command.hwy_api_notify
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ color == 'red' }}"
+        sequence:
+          - target:
+              entity_id: script.redblink
+            action: script.turn_on
+      - conditions:
+          - condition: template
+            value_template: "{{ color == 'orange' }}"
+        sequence:
+          - target:
+              entity_id: script.orangeblink
+            action: script.turn_on
+      - conditions:
+          - condition: template
+            value_template: "{{ color == 'yellow' }}"
+        sequence:
+          - target:
+              entity_id: script.yellowblink
+            action: script.turn_on
+      - conditions:
+          - condition: template
+            value_template: "{{ color == 'green' }}"
+        sequence:
+          - target:
+              entity_id: script.greenblink
+            action: script.turn_on
+      - conditions:
+          - condition: template
+            value_template: "{{ color == 'cyan' }}"
+        sequence:
+          - target:
+              entity_id: script.cyanblink
+            action: script.turn_on
+mode: queued
+max: 10
