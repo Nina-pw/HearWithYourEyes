@@ -2,11 +2,12 @@ __pycache__/
 *.pyc
 *.tflite
 
-# dataset
+# ignore dataset ใหญ่
 data/urbansound8k/
 
-# large files
+# ignore wav ทั้งหมดก่อน
 *.wav
 
-# allow small csv (optional)
-!data/sample/
+# ✅ allow wav เฉพาะ evaluation
+!data/evaluationSound/
+!data/evaluationSound/**/*.wav
