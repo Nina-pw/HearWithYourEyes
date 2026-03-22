@@ -1,5 +1,12 @@
 __pycache__/
 *.pyc
 *.tflite
-urbansound8k/
-*.csv
+
+# dataset
+data/urbansound8k/
+
+# large files
+*.wav
+
+# allow small csv (optional)
+!data/sample/
