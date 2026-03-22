@@ -11,3 +11,5 @@ data/urbansound8k/
 # ✅ allow wav เฉพาะ evaluation
 !data/evaluationSound/
 !data/evaluationSound/**/*.wav
+
+results
