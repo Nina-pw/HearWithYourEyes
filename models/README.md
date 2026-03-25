@@ -7,6 +7,12 @@
 - `yamnet.tflite`
 - `yamnet_class_map.csv`
 
+ไฟล์เหล่านี้ควรวางไว้ใน:
+
+```bash
+models/
+```
+
 ## Source
 
 โมเดล YAMNet สามารถดูข้อมูลเพิ่มเติมได้จาก:

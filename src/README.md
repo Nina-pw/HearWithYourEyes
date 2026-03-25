@@ -13,7 +13,10 @@
 - `raspberry_pi/`
   - โค้ดหลักที่ใช้รันระบบบน Raspberry Pi
 
-## Notes
+## Main Entry Point
 
-- ควรอ่านค่าการตั้งค่าจาก config file แทนการ hardcode ค่าในโค้ด
-- หากมีการแก้ไข path ของโมเดลหรือ endpoint ต่าง ๆ ควรตรวจสอบให้ตรงกับไฟล์ config
+ไฟล์หลักสำหรับรันระบบคือ:
+
+```bash
+src/raspberry_pi/raspberry_pi.py
+```
