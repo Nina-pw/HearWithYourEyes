@@ -33,6 +33,17 @@ HearWithYourEyes เป็นระบบที่ช่วยให้ผู้
 
 ---
 
+## Quick Start
+
+1. Clone repository
+2. Install dependencies
+3. ตั้งค่า `config/app_config.yaml`
+4. ตรวจสอบไมโครโฟนบน Raspberry Pi
+5. ตั้งค่า Home Assistant และ Yeelight
+6. รันระบบด้วยคำสั่ง `python src/raspberry_pi/raspberry_pi.py --mic --loop`
+
+---
+
 ## Project Structure
 
 ```bash
