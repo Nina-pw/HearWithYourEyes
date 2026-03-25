@@ -1,0 +1,25 @@
+raspberry_pi:
+  model_path: "models/yamnet.tflite"
+  class_map_path: "models/yamnet_class_map.csv"
+  ha_webhook_url: "http://192.168.1.104:8123/api/webhook/yamnet_event"
+  yeelight_ip: "192.168.1.103"
+
+  mic:
+    duration: 1.0
+    device: null
+    loop: true
+    topk: 5
+
+  thresholds:
+    red: 0.40
+    orange: 0.20
+    yellow: 0.18
+    green: 0.12
+    cyan: 0.07
+
+  cooldowns:
+    Red: 5
+    Orange: 8
+    Yellow: 10
+    Green: 20
+    Cyan: 20

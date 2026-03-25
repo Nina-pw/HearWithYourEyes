@@ -9,11 +9,11 @@ rest_command:
     url: https://api.line.me/v2/bot/message/push
     method: POST
     headers:
-      Authorization: "Bearer XOgMjb/QN8q0DIJM1AF1qYEOaIJveU4/janckEGRsRndDP3oO7ZXiLEJH6nJU4OvLF35WoebVHqfuefWarjhRHXc4e>
+      Authorization: "Bearer <YOUR_LINE_ACCESS_TOKEN>"
       Content-Type: "application/json"
     payload: >
       {
-        "to": "U3d2139a5f9d1669ef63c34a8d845c708",
+        "to": "<YOUR_LINE_USER_ID>",
         "messages": [
           {
             "type": "text",
