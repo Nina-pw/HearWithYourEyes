@@ -1,12 +1,12 @@
 # HearWithYourEyes
 
-ระบบตรวจจับเสียงสิ่งแวดล้อมและแปลงผลลัพธ์เป็นสัญญาณแสงและการแจ้งเตือนแบบเรียลไทม์ สำหรับผู้มีปัญหาการได้ยิน เป็นระบบที่ใช้เทคโนโลยี AI + IoT 
+ระบบตรวจจับเสียงสิ่งแวดล้อมและแปลงผลลัพธ์เป็นสัญญาณแสงและการแจ้งเตือนแบบเรียลไทม์ สำหรับผู้มีความบกพร่องทางการได้ยิน โดยใช้เทคโนโลยี AI และ IoT
 
 ---
 
 ## Overview
 
-HearWithYourEyes เป็นระบบที่ช่วยให้ผู้ที่มีความบกพร่องทางการได้ยินสามารถรับรู้เหตุการณ์สำคัญผ่าน “การมองเห็น” แทนการได้ยิน
+HearWithYourEyes เป็นระบบที่ช่วยให้ผู้ใช้งานสามารถรับรู้เหตุการณ์สำคัญผ่าน “การมองเห็น” แทนการได้ยิน โดยตรวจจับเสียงจากสิ่งแวดล้อมและแปลงเป็นการแจ้งเตือนในรูปแบบต่าง ๆ
 
 ระบบสามารถตรวจจับเสียงสำคัญได้ ตัวอย่างเช่น:
 
@@ -15,7 +15,7 @@ HearWithYourEyes เป็นระบบที่ช่วยให้ผู้
 * Doorbell
 * Dog bark
 
-เมื่อระบบตรวจจับเหตุการณ์ได้ จะทำการแปลงผลลัพธ์เป็น:
+เมื่อระบบตรวจจับเหตุการณ์ได้ จะทำการแสดงผลผ่าน:
 
 * การแสดงผลด้วยสีของแสง (Smart Light)
 * การแจ้งเตือนผ่านสมาร์ตโฟน (LINE / Discord)
@@ -246,6 +246,64 @@ python src/raspberry_pi/raspberry_pi.py --mic
 
 ---
 
+## Run Notification API
+
+```bash
+uvicorn src.api.api_noti:app --host 0.0.0.0 --port 8000
+```
+
+ใช้สำหรับรับข้อมูลเหตุการณ์และส่งแจ้งเตือนไปยัง LINE และ Discord
+
+---
+
+## Run Automatically on Startup
+
+หากต้องการให้ระบบเริ่มทำงานอัตโนมัติเมื่อ Raspberry Pi เปิดเครื่อง สามารถตั้งค่าเป็น `systemd service` ได้
+
+### 1. Create service file
+
+```bash
+sudo nano /etc/systemd/system/hear.service
+```
+
+### 2. Add the following configuration
+
+```ini
+[Unit]
+Description=Hear With Your Eyes Service
+After=network.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/HearWithYourEyes
+ExecStart=/usr/bin/python3 /home/pi/HearWithYourEyes/src/raspberry_pi/raspberry_pi.py --mic --loop
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+### 3. Enable and start the service
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable hear.service
+sudo systemctl start hear.service
+```
+
+### 4. Check service status
+
+```bash
+sudo systemctl status hear.service
+```
+
+หมายเหตุ:
+
+* ควรตรวจสอบ path ของโปรเจกต์ให้ตรงกับตำแหน่งจริงบน Raspberry Pi
+* หากมีการใช้ Virtual Environment ควรแก้ `ExecStart` ให้ตรงกับ Python interpreter ที่ใช้งาน
+
+---
+
 ## Evaluation
 
 สามารถใช้ไฟล์เสียงใน:
@@ -265,9 +323,10 @@ evaluation/
 ## Notes
 
 * Dataset UrbanSound8K มีขนาดใหญ่ จึงไม่รวมอยู่ใน Git repository
-* Raspberry Pi, Yeelight และ Home Assistant ควรอยู่ในเครือข่ายเดียวกัน
+* อุปกรณ์ทั้งหมดควรอยู่ในเครือข่ายเดียวกัน
 * หากมีการเปลี่ยน IP Address ของอุปกรณ์ ควรอัปเดตค่าในไฟล์ที่เกี่ยวข้อง
 * ควรทดสอบไมโครโฟน หลอดไฟ และ Home Assistant ก่อนใช้งานจริง
+* สภาพแวดล้อมที่มีเสียงรบกวนสูงอาจส่งผลต่อความแม่นยำ
 
 ---
 

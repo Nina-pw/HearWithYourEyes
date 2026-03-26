@@ -13,7 +13,7 @@ audio = sd.rec(int(DURATION * SR), samplerate=SR, channels=1, dtype="float32")
 sd.wait()
 audio = audio.flatten()
 
-print("📊 Creating Mel Spectrogram...")
+print("Creating Mel Spectrogram...")
 
 mel = librosa.feature.melspectrogram(
     y=audio,
@@ -37,7 +37,7 @@ plt.colorbar(format="%+2.0f dB")
 plt.title("Mel Spectrogram from ReSpeaker 2-Mic")
 plt.tight_layout()
 plt.savefig("mel_spectrogram.png", dpi=300)
-print("✅ Saved mel_spectrogram.png")
+print("Saved mel_spectrogram.png")
 
 # python mel_view.py
 # scp pi@project492:~/mel_spectrogram.png .

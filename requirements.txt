@@ -4,3 +4,7 @@ PyYAML
 sounddevice
 yeelight
 tflite-runtime
+scipy
+librosa
+soundfile
+matplotlib

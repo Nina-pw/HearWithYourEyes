@@ -29,14 +29,14 @@ def send_alert(data: dict):
 
     now_ts = time()
 
-    # 🚫 กันแจ้งเตือนซ้ำ
+    # กันแจ้งเตือนซ้ำ
     if LAST_EVENT["event"] == event and (now_ts - LAST_EVENT["time"]) < COOLDOWN:
         return {"status": "skipped", "reason": "duplicate in cooldown"}
 
     LAST_EVENT["event"] = event
     LAST_EVENT["time"] = now_ts
 
-    # 🎨 ระดับ + emoji
+    # ระดับ + emoji
     if level.lower() == "emergency":
         level_icon = "🔴"
         title = "Emergency"
@@ -59,7 +59,7 @@ def send_alert(data: dict):
         color = 0x3498DB
 
     # =========================
-    # 📝 ข้อความหลัก
+    # ข้อความหลัก
     # =========================
     text = (
         f"{level_icon} Hear With Your Eyes – {title}\n"
@@ -70,7 +70,7 @@ def send_alert(data: dict):
     )
 
     # =========================
-    # 📤 ส่ง LINE
+    # ส่ง LINE
     # =========================
     if LINE_TOKEN and LINE_USER_ID:
         headers = {
@@ -86,7 +86,7 @@ def send_alert(data: dict):
         requests.post(LINE_API, headers=headers, json=payload)
 
     # =========================
-    # 📤 ส่ง DISCORD
+    # ส่ง DISCORD
     # =========================
     if DISCORD_WEBHOOK:
         discord_payload = {
